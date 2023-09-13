@@ -5,7 +5,7 @@ from db.models import BASE
 
 
 def added_engine(url: str):
-    engine = create_engine(url=url, echo=True)
+    engine = create_engine(url=url, echo=False)
     BASE.metadata.create_all(engine)
     return engine
 

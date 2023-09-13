@@ -8,7 +8,9 @@ class StartMenu:
         ["Возобновить ▶️"],
         ["Информация ℹ️"],
         ["Добавить чат для рассылки ➕"],
-        ["Список чатов 📄"]
+        ["Удалить чат ➖"],
+        ["Список чатов 📄"],
+        ["Журнал ошибок 🗒"]
     ],
         resize_keyboard=True
     )
@@ -32,11 +34,3 @@ class ListHours:
               for hour in range(1, 9)]]
 
     menu = InlineKeyboardMarkup(hours)
-
-
-class RemoveChat:
-    def __init__(self, id, link):
-        self.id = str(id)
-        self.link = link
-        self.remove = [[InlineKeyboardButton(text="Удалить", callback_data=f"remove_{self.id}_{self.link}")]]
-        self.button = InlineKeyboardMarkup(self.remove)

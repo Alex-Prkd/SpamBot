@@ -20,6 +20,7 @@ class SettingsBot:
 
 class InfoID:
     ADMIN_ID = int(os.environ["ADMIN_ID"])
+    PHONE = os.environ["PHONE_NUMBER"]
 
 
 

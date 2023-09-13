@@ -5,12 +5,11 @@ from pyrogram.handlers import MessageHandler
 import config
 from app.handlers.hanlders import my_function
 
-
-app = Client(name="my_account",
+app = Client(name="Nikita",
              api_id=config.ApiTelegram.API_ID,
              api_hash=config.ApiTelegram.API_HASH,
-
              )
 
 
 app.add_handler(MessageHandler(my_function, saved_messages))
+

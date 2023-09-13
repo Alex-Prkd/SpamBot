@@ -1,5 +1,6 @@
 import datetime
 
+from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 
 
@@ -34,9 +35,8 @@ def write_new_chat(session_maker: sessionmaker, link_chat: str):
         session.commit()
 
 
-def delete_chat(session_maker: sessionmaker,
-                chat_id):
+def delete_chat(session_maker: sessionmaker, name_chat):
     with session_maker.begin() as session:
-        chat = session.get(Chat, chat_id)
+        chat = session.scalar(select(Chat).filter(Chat.link == name_chat))
         session.delete(chat)
         session.commit()

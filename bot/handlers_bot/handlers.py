@@ -2,7 +2,7 @@ from pyrogram.types import Message, CallbackQuery
 from sqlalchemy import exc
 
 import db
-from bot.keyboards.menu_bot import StartMenu, MenuSchedule, ListMinutes, ListHours, RemoveChat
+from bot.keyboards.menu_bot import StartMenu, MenuSchedule, ListMinutes, ListHours
 from db.commands.reader import all_chats
 from db.commands.write import write_new_chat, delete_chat
 from schedule_post import sending_post
@@ -67,10 +67,16 @@ def get_link_chat(_, message: Message):
                        f"'Ссылка чата (пр. https://t.me/QWERTY) '")
 
 
+def info_del_chat(_, message: Message):
+    message.reply(text="Отправьте сообщение в формате:\n"
+                       f"/Del\n"
+                       f"'Ссылка чата (пр. https://t.me/QWERTY) '")
+
+
 def add_chat(_, message: Message):
     try:
-        text = message.text.split(sep="\n")     # ["/AddChat", "link chat"]
-        link_chat = text[1].split("https://t.me/")[1]   # ["https://t.me/", "link chat"]
+        text = message.text.split(sep="\n")     # ["/AddChat", "https://QWERTY"]
+        link_chat = text[1].split("https://t.me/")[1]   # ["QWERTY"]
         write_new_chat(session_maker=db.session_maker,
                        link_chat=str(link_chat))
         message.reply(text=f"Чат t.me/{link_chat} - добавлен в список рассылки.")
@@ -84,19 +90,22 @@ def add_chat(_, message: Message):
 def get_all_chats(_, message: Message):
     result = all_chats(session_maker=db.session_maker)
     if len(result) != 0:
+        chats = ""
         for chat in result:
-            remove_button = RemoveChat(chat.id, chat.link)
-            message.reply(f"t.me/{chat.link}",
-                          reply_markup=remove_button.button)
+            chats += f"https://t.me/{chat.link}\n"
+        message.reply(text=chats)
     else:
         message.reply(text="Список чатов пуст.")
 
 
-def remove_chat(_, callback_data: CallbackQuery):
-    data = callback_data.data.split(sep="_")     # ["remove", "chat_id", link]
-    chat_id = data[1]
-    link = data[2]
-    delete_chat(session_maker=db.session_maker,
-                chat_id=int(chat_id))
+def remove_chat(_, message: Message):
+    data = message.text.split("\n")     # (Del, https://t.me/qwerty)
+    link_chat = data[1].split("/")[3]   # qwerty
 
-    callback_data.message.reply(text=f"Чат https://t.me/{link} удалён")
+    delete_chat(session_maker=db.session_maker,
+                name_chat=link_chat)
+    message.reply(text=f"Чат https://t.me/{link_chat} удалён.")
+
+
+def send_log_file(_, message: Message):
+    message.reply_document(document="log.log")

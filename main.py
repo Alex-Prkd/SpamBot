@@ -1,5 +1,8 @@
+from time import sleep
+
 from pyrogram import idle
 
+import config
 from app import app
 from bot import bot
 

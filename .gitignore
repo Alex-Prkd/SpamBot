@@ -130,3 +130,4 @@ venv.bak/
 .mypy_cache/
 Доступ к серверу.txt
 Инструкция!.pdf
+message.db
