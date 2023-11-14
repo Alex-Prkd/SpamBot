@@ -128,6 +128,5 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-Доступ к серверу.txt
-Инструкция!.pdf
 message.db
+.env.json

@@ -8,6 +8,7 @@ from app.handlers.hanlders import my_function
 app = Client(name="Nikita",
              api_id=config.ApiTelegram.API_ID,
              api_hash=config.ApiTelegram.API_HASH,
+             phone_number=config.InfoID.PHONE
              )
 
 

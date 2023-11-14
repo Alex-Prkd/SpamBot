@@ -40,3 +40,11 @@ def delete_chat(session_maker: sessionmaker, name_chat):
         chat = session.scalar(select(Chat).filter(Chat.link == name_chat))
         session.delete(chat)
         session.commit()
+
+
+def delete_all_posts(session_maker: sessionmaker):
+    with session_maker() as session:
+        posts = session.scalars(select(Message)).all()
+        for post in posts:
+            session.delete(post)
+        session.commit()

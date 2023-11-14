@@ -1,11 +1,24 @@
+import logging
+import os
+from logging.handlers import RotatingFileHandler
+
 from pyrogram.types import Message, CallbackQuery
 from sqlalchemy import exc
 
 import db
-from bot.keyboards.menu_bot import StartMenu, MenuSchedule, ListMinutes, ListHours
+from bot.keyboards.menu_bot import StartMenu, MenuSchedule, ListMinutes, ListHours, MenuChangeAccount
 from db.commands.reader import all_chats
-from db.commands.write import write_new_chat, delete_chat
+from db.commands.write import write_new_chat, delete_chat, delete_all_posts
 from schedule_post import sending_post
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.ERROR)
+handler = RotatingFileHandler(filename="log.log", maxBytes=7*1024*1024, backupCount=2)
+format_log = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+handler.setFormatter(format_log)
+logger.addHandler(handler)
+
 
 
 def start_bot(_, message: Message):
@@ -109,3 +122,47 @@ def remove_chat(_, message: Message):
 
 def send_log_file(_, message: Message):
     message.reply_document(document="log.log")
+
+
+def change_account(_, message: Message):
+    change = MenuChangeAccount()
+    message.reply(text="Поменять все значения в файле, на новые.\n"
+                       "Отправить файл с новыми данными боту.\n"
+                       "В названии файла, который вы присылаете, должно присутствовать '.env.json'\n"
+                       "\nПосле отправки файла\n"
+                       "данные о старом аккаунте будут удалены.\n"
+                       "Рассылка остановлена.\n"
+                       "Вам будет отправлена инструкция, как перезапустить бота.\n\n"
+                       "С момента подключения нового аккаунта, управлять админ ботом можно как и с первого подключённого"
+                       " аккаунта, так и с нового аккаунта.\n"
+                       "Перед использованием, поставить на паузу рассылку, убедиться, что новый аккаунт,"
+                       "состоит в чатах (Нажать 'Список чатов').\n"
+                       "В противном случае, чаты в который аакаунт не состоит, будут удалены.\n"
+                       "После возбновить рассылку.", reply_markup=change.menu)
+
+
+def send_json_env(_, callback_query: CallbackQuery):
+    callback_query.message.reply_document(document="./.env.json")
+
+
+def send_instruction(_, callback_query: CallbackQuery):
+    try:
+        callback_query.message.reply_document(document="./instructions.pdf")
+    except Exception as err:
+        print(err)
+        print(type(err).__name__)
+
+
+def save_new_env(_, message: Message):
+    try:
+        delete_all_posts(session_maker=db.session_maker)
+        message.reply_document(document="./instructions.pdf")
+        message.reply(text="Рассылка остановлена.\nСледуйте инструкциям, для перезапуска.")
+        os.remove("./.env.json")
+        message.download(file_name="./.env.json")
+        from app import app
+        app.log_out()
+    except Exception as err:
+        print(err)
+        print(type(err).__name__)
+

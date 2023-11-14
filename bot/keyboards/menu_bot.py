@@ -10,7 +10,8 @@ class StartMenu:
         ["Добавить чат для рассылки ➕"],
         ["Удалить чат ➖"],
         ["Список чатов 📄"],
-        ["Журнал ошибок 🗒"]
+        ["Журнал ошибок 🗒"],
+        ["Смена аккаунта"]
     ],
         resize_keyboard=True
     )
@@ -34,3 +35,12 @@ class ListHours:
               for hour in range(1, 9)]]
 
     menu = InlineKeyboardMarkup(hours)
+
+
+class MenuChangeAccount:
+    settings = [[InlineKeyboardButton(text="Прислать файл", callback_data="json_file")],
+                [InlineKeyboardButton(text="Прислать инструкцию", callback_data="instruction")]]
+
+    menu = InlineKeyboardMarkup(settings)
+
+
