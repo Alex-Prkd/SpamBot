@@ -28,6 +28,7 @@ class SettingsBot:
 
 
 class InfoID:
+    NAME = os.environ["NAME"]
     ADMIN_ID = int(json_env("ADMIN_ID"))
     PHONE = json_env("PHONE")
 

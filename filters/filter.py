@@ -61,6 +61,14 @@ def send_change_instruction(_, query):
     return re.search("instruction", query.data)
 
 
+def filter_buyer(_, message):
+    try:
+        return not admin(_, message) and message.chat.type == ChatType.PRIVATE
+    except AttributeError:
+        """Сообщения в каналах"""
+        pass
+
+
 saved_messages = filters.create(filter_saved_message)
 filter_minute = filters.create(minute)
 filter_hour = filters.create(hour)

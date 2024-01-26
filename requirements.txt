@@ -13,3 +13,4 @@ typing_extensions==4.6.2
 tzdata==2023.3
 tzlocal==5.0.1
 python-dotenv~=1.0.0
+json_environ==0.1.1

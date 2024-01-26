@@ -11,7 +11,7 @@ from bot.handlers_bot.handlers import start_bot, edit_schedule_post, edit_schedu
 from filters.filter import filter_minute, filter_hour, admin, request_json_file, check_env_file, \
     send_change_instruction
 
-bot = Client(name="NikitaBot",
+bot = Client(name=f"{config.InfoID.NAME}Bot",
              api_id=config.SettingsBot.API_ID,
              api_hash=config.SettingsBot.API_HASH,
              bot_token=config.SettingsBot.BOT_TOKEN
